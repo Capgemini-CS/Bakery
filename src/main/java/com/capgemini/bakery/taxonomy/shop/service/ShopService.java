@@ -2,7 +2,6 @@ package com.capgemini.bakery.taxonomy.shop.service;
 
 
 import com.capgemini.bakery.taxonomy.shop.model.dto.ShopDto;
-import com.capgemini.bakery.taxonomy.shop.model.entity.Shop;
 import com.capgemini.bakery.taxonomy.shop.model.mapper.ShopMapper;
 import com.capgemini.bakery.taxonomy.shop.repository.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,8 @@ public class ShopService {
         this.shopRepository = shopRepository;
     }
 
-
     public ShopDto add(ShopDto shopDto) {
-        Shop shop = shopRepository.save(ShopMapper.shopDtoToShop(shopDto));
-        return ShopMapper.shopToShopDto(shop);
+        return ShopMapper.shopToShopDto(shopRepository.save(ShopMapper.shopDtoToShop(shopDto)));
     }
 
     public List<ShopDto> getAll() {
@@ -32,29 +29,28 @@ public class ShopService {
     }
 
     public ShopDto getById(Long id) {
-        Shop shop = shopRepository.getReferenceById(id);
-        return ShopMapper.shopToShopDto(shop);
+        return ShopMapper.shopToShopDto(shopRepository.getReferenceById(id));
     }
 
     public ShopDto deleteById(Long id) {
-        Shop shopBeforeDelete = shopRepository.getReferenceById(id);
+        ShopDto shopDtoToBeDeleted = getById(id);
         shopRepository.deleteById(id);
-        return ShopMapper.shopToShopDto(shopBeforeDelete);
+        return shopDtoToBeDeleted;
     }
 
-    public ShopDto updateRegionByID(Long id, ShopDto shopDto) {
-        Shop shopPreviously = new Shop();
+    public ShopDto updateById(Long id, ShopDto shopDto) {
+        ShopDto shopDtoToBeUpdated = new ShopDto();
+
         if (shopRepository.findById(id).isPresent()) {
-            shopPreviously = ShopMapper.shopDtoToShop(shopDto);
-        } else {
-            System.out.println("qweqdsadczx");
+            shopDtoToBeUpdated = ShopDto.builder()
+                    .id(id)
+                    .division(shopDto.getDivision())
+                    .region(shopDto.getRegion())
+                    .area(shopDto.getArea())
+                    .build();
+            shopRepository.save(ShopMapper.shopDtoToShop(shopDtoToBeUpdated));
+            return shopDtoToBeUpdated;
         }
-        Shop shopUpdated = new Shop();
-        shopUpdated.setId(id);
-        shopUpdated.setDivision(shopPreviously.getDivision());
-        shopUpdated.setRegion(shopPreviously.getRegion());
-        shopUpdated.setArea(shopPreviously.getArea());
-        shopRepository.save(shopUpdated);
-        return ShopMapper.shopToShopDto(shopUpdated);
+        return shopDtoToBeUpdated;
     }
 }

@@ -11,12 +11,13 @@ import javax.persistence.*;
 @ToString
 @Builder
 @Entity
-@Table(name = "SHOPS", schema = "BAKERY")
+@Table(name = "shops")
 
 public class Shop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shop_id")
     private Long id;
 
     @Column(name = "division")

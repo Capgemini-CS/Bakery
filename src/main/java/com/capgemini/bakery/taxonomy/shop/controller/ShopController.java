@@ -22,27 +22,27 @@ public class ShopController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ShopDto> postRegion(@RequestBody @Valid ShopDto shopDto){
+    public ResponseEntity<ShopDto> add(@RequestBody @Valid ShopDto shopDto){
         return new ResponseEntity<>(shopService.add(shopDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ShopDto>> getAllRegions(){
+    public ResponseEntity<List<ShopDto>> getAll(){
         return new ResponseEntity<>(shopService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ShopDto> getRegionByID(@PathVariable Long id){
+    public ResponseEntity<ShopDto> getById(@PathVariable Long id){
         return new ResponseEntity<>(shopService.getById(id),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ShopDto> deleteByID(@PathVariable Long id){
+    public ResponseEntity<ShopDto> deleteById(@PathVariable Long id){
         return new ResponseEntity<>(shopService.deleteById(id),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ShopDto> updateByID(@PathVariable Long id, @RequestBody @Valid ShopDto shopDto){
-        return new ResponseEntity<>(shopService.updateRegionByID(id,shopDto),HttpStatus.OK);
+    public ResponseEntity<ShopDto> updateById(@PathVariable Long id, @RequestBody @Valid ShopDto shopDto){
+        return new ResponseEntity<>(shopService.updateById(id,shopDto),HttpStatus.OK);
     }
 }
