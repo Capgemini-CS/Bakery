@@ -4,6 +4,7 @@ import com.capgemini.bakery.taxonomy.area.model.Area;
 import com.capgemini.bakery.taxonomy.area.model.dto.AreaDTO;
 import com.capgemini.bakery.taxonomy.area.model.mapper.AreaMapper;
 import com.capgemini.bakery.taxonomy.area.repository.AreaRepository;
+import com.capgemini.bakery.taxonomy.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +33,14 @@ public class AreaService {
     }
 
     public AreaDTO getAreaByID(Integer areaId){
-        Area area = areaRepository.getReferenceById(areaId);
+        Area area = areaRepository.findById(areaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Area with id = " + areaId));
         return AreaMapper.toAreaDTO(area);
     }
 
     public AreaDTO deleteByID(Integer areaId){
-        Area areaBeforeDelete = areaRepository.getReferenceById(areaId);
+        Area areaBeforeDelete = areaRepository.findById(areaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Area with id = " + areaId));
         areaRepository.deleteById(areaId);
         return AreaMapper.toAreaDTO(areaBeforeDelete);
     }
@@ -47,7 +50,7 @@ public class AreaService {
         if(areaRepository.findById(areaId).isPresent()){
             areaPreviously = AreaMapper.toArea(areaDTO);
         } else {
-            System.out.println("qweqdsadczx");
+            throw new ResourceNotFoundException("Not found Area with id = " + areaId);
         }
         Area areaUpdated = new Area();
         areaUpdated.setAreaId(areaId);
