@@ -6,6 +6,7 @@ import com.capgemini.bakery.taxonomy.area.repository.AreaRepository;
 import com.capgemini.bakery.taxonomy.area.service.AreaService;
 import com.capgemini.bakery.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,6 +37,16 @@ class AreaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    private ArrayList<Area> areas;
+
+    @BeforeEach
+    void setupList() {
+        areas = new ArrayList<>();
+        Area area = new Area(1,"123","Bucharest");
+        areas.add(area);
+    }
+
     @Test
     void shouldAddArea() throws Exception {
         Area area = new Area(1, "007", "Craiova");
@@ -48,12 +59,11 @@ class AreaControllerTest {
     @Test
     void shouldReturnArea() throws Exception {
         int id = 1;
-        Area area = new Area(id, "007", "Craiova");
-        when(areaService.getAreaByID(id)).thenReturn(AreaMapper.toAreaDTO(area));
+        when(areaService.getAreaByID(areas.get(0).getAreaId())).thenReturn(AreaMapper.toAreaDTO(areas.get(0)));
         mockMvc.perform(get("/bakery/v1/taxonomy/area/{id}", id)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.areaId").value(id))
-                .andExpect(jsonPath("$.code").value(area.getCode()))
-                .andExpect(jsonPath("$.name").value(area.getName()))
+                .andExpect(jsonPath("$.areaId").value(areas.get(0).getAreaId()))
+                .andExpect(jsonPath("$.code").value(areas.get(0).getCode()))
+                .andExpect(jsonPath("$.name").value(areas.get(0).getName()))
                 .andDo(print());
     }
 
