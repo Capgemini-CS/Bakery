@@ -1,4 +1,4 @@
-package com.capgemini.bakery.taxonomy.exception;
+package com.capgemini.bakery.exception;
 
 import lombok.*;
 

@@ -4,7 +4,7 @@ import com.capgemini.bakery.taxonomy.area.model.Area;
 import com.capgemini.bakery.taxonomy.area.model.dto.AreaDTO;
 import com.capgemini.bakery.taxonomy.area.model.mapper.AreaMapper;
 import com.capgemini.bakery.taxonomy.area.repository.AreaRepository;
-import com.capgemini.bakery.taxonomy.exception.ResourceNotFoundException;
+import com.capgemini.bakery.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

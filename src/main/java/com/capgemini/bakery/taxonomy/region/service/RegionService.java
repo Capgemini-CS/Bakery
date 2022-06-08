@@ -1,5 +1,6 @@
 package com.capgemini.bakery.taxonomy.region.service;
 
+import com.capgemini.bakery.exception.ResourceNotFoundException;
 import com.capgemini.bakery.taxonomy.region.model.Region;
 import com.capgemini.bakery.taxonomy.region.model.dto.RegionDTO;
 import com.capgemini.bakery.taxonomy.region.model.mapper.RegionMapper;
@@ -31,12 +32,14 @@ public class RegionService {
     }
 
     public RegionDTO getRegionByID(Integer regionID){
-        Region region = regionRepository.getReferenceById(regionID);
+        Region region = regionRepository.findById(regionID)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Region with id = " + regionID));
         return RegionMapper.toRegionDTO(region);
     }
 
     public RegionDTO deleteByID(Integer regionID){
-        Region regionBeforeDelete = regionRepository.getReferenceById(regionID);
+        Region regionBeforeDelete = regionRepository.findById(regionID)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Region with id = " + regionID));
         regionRepository.deleteById(regionID);
         return RegionMapper.toRegionDTO(regionBeforeDelete);
     }
@@ -46,7 +49,7 @@ public class RegionService {
         if(regionRepository.findById(regionID).isPresent()){
             regionPreviously = RegionMapper.toRegion(regionDTO);
         } else {
-            System.out.println("qweqdsadczx");
+            throw new ResourceNotFoundException("Not found Region with id = " + regionID);
         }
         Region regionUpdated = new Region();
         regionUpdated.setRegion_id(regionID);

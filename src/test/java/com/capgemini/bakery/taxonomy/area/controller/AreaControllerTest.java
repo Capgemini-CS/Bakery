@@ -1,11 +1,10 @@
 package com.capgemini.bakery.taxonomy.area.controller;
 
 import com.capgemini.bakery.taxonomy.area.model.Area;
-import com.capgemini.bakery.taxonomy.area.model.dto.AreaDTO;
 import com.capgemini.bakery.taxonomy.area.model.mapper.AreaMapper;
 import com.capgemini.bakery.taxonomy.area.repository.AreaRepository;
 import com.capgemini.bakery.taxonomy.area.service.AreaService;
-import com.capgemini.bakery.taxonomy.exception.ResourceNotFoundException;
+import com.capgemini.bakery.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +16,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest(AreaController.class)
 class AreaControllerTest {
