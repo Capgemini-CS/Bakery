@@ -1,6 +1,7 @@
 package com.capgemini.bakery.taxonomy.shop.service;
 
 
+import com.capgemini.bakery.exception.ResourceNotFoundException;
 import com.capgemini.bakery.taxonomy.shop.model.dto.ShopDto;
 import com.capgemini.bakery.taxonomy.shop.model.mapper.ShopMapper;
 import com.capgemini.bakery.taxonomy.shop.repository.ShopRepository;
@@ -29,28 +30,29 @@ public class ShopService {
     }
 
     public ShopDto getById(Long id) {
-        return ShopMapper.shopToShopDto(shopRepository.getReferenceById(id));
+
+        return ShopMapper.shopToShopDto(shopRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Shop with id = " + id)));
     }
 
     public ShopDto deleteById(Long id) {
-        ShopDto shopDtoToBeDeleted = getById(id);
+        ShopDto shopDtoToBeDeleted = ShopMapper.shopToShopDto(shopRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Shop with id = " + id)));
         shopRepository.deleteById(id);
         return shopDtoToBeDeleted;
     }
 
     public ShopDto updateById(Long id, ShopDto shopDto) {
-        ShopDto shopDtoToBeUpdated = new ShopDto();
 
         if (shopRepository.findById(id).isPresent()) {
-            shopDtoToBeUpdated = ShopDto.builder()
+            return add(ShopDto.builder()
                     .id(id)
                     .division(shopDto.getDivision())
                     .region(shopDto.getRegion())
                     .area(shopDto.getArea())
-                    .build();
-            shopRepository.save(ShopMapper.shopDtoToShop(shopDtoToBeUpdated));
-            return shopDtoToBeUpdated;
+                    .build());
+        } else {
+            throw new ResourceNotFoundException("Not found Shop with id = " + id);
         }
-        return shopDtoToBeUpdated;
     }
 }
